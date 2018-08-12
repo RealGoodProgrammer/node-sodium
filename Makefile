@@ -71,9 +71,17 @@ ifeq (,$(wildcard ${SODIUM_LIB}.*))
 	@cd $(LIBSODIUM_DIR)/ && ./autogen.sh
 	@cd $(LIBSODIUM_DIR)/ && ./configure --enable-static \
            --enable-shared --with-pic --prefix="$(INSTALL_DIR)"
-	@cd $(LIBSODIUM_DIR)/ && make clean > /dev/null
-	@cd $(LIBSODIUM_DIR)/ && make -j3 check
-	@cd $(LIBSODIUM_DIR)/ && make -j3 install
+    ifneq ($(UNAME_S),FreeBSD)
+		@cd $(LIBSODIUM_DIR)/ && make clean > /dev/null
+		@cd $(LIBSODIUM_DIR)/ && make -j3 check
+		@cd $(LIBSODIUM_DIR)/ && make -j3 install
+    endif
+    ifeq ($(UNAME_S),FreeBSD)
+	    @cd $(LIBSODIUM_DIR)/ && gmake clean > /dev/null
+	    @cd $(LIBSODIUM_DIR)/ && gmake -j3 check
+	    @cd $(LIBSODIUM_DIR)/ && gmake -j3 install
+    endif
+
 else
 	@echo Found a compiled lib in ${INSTALL_DIR}. Make sure this library that was compiled for this platform.
 	@echo Use make clean to remove the static lib and force recompilation
