@@ -28,6 +28,11 @@ else
 		THIS_OS = Linux
         CCFLAGS += -D LINUX
 		CCFLAGS += -fPIC
+    endif
+    ifeq ($(UNAME_S),FreeBSD)
+		THIS_OS = FreeBSD
+		CCFLAGS += -D FreeBSD
+		CCFLAGS += -fPIC
 
     endif
     ifeq ($(UNAME_S),Darwin)
@@ -40,6 +45,10 @@ else
     ifeq ($(UNAME_P),x86_64)
 		PLATFORM = x86_64
         CCFLAGS += -D AMD64
+    endif
+    ifeq ($(UNAME_P),amd64)
+    		PLATFORM = amd64
+            CCFLAGS += -D AMD64
     endif
     ifneq ($(filter %86,$(UNAME_P)),)
         CCFLAGS += -D IA32
